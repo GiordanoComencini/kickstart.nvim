@@ -1040,5 +1040,13 @@ vim.o.tabstop = 2 -- width of a tab character
 vim.o.shiftwidth = 2 -- width for autoindent
 vim.o.expandtab = true -- convert tabs to spaces
 
+-- Recognize .mojo as mojo
+vim.filetype.add {
+  extension = { mojo = 'mojo' },
+}
+
+-- Treat mojo as python for Treesitter
+vim.treesitter.language.register('python', 'mojo')
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
