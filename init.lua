@@ -1035,5 +1035,10 @@ require('lazy').setup({
   },
 })
 
+-- Make tabs 2 spaces. And also use spaces on autoindent
+vim.o.tabstop = 2 -- width of a tab character
+vim.o.shiftwidth = 2 -- width for autoindent
+vim.o.expandtab = true -- convert tabs to spaces
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
