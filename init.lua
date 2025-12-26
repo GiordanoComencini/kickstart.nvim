@@ -474,6 +474,10 @@ require('lazy').setup({
     },
   },
   {
+    -- Java LSP (needs separate treatment)
+    'mfussenegger/nvim-jdtls',
+  },
+  {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -720,6 +724,11 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
+        automatic_enable = {
+          exclude = {
+            'jdtls',
+          },
+        },
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -733,7 +742,9 @@ require('lazy').setup({
       }
     end,
   },
-
+  {
+    'mfussenegger/nvim-dap', -- core DAP
+  },
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
@@ -1040,9 +1051,14 @@ vim.o.expandtab = true -- convert tabs to spaces
 vim.filetype.add {
   extension = { mojo = 'mojo' },
 }
-
 -- Treat mojo as python for Treesitter
 vim.treesitter.language.register('python', 'mojo')
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'java',
+  callback = function(args)
+    require('custom.jdtls.jdtls_setup').setup()
+  end,
+})
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
