@@ -747,6 +747,129 @@ require('lazy').setup({
   },
   {
     'mfussenegger/nvim-dap', -- core DAP
+    config = function()
+      local dap = require 'dap'
+      -- local widgets = require 'dap.ui.widgets'
+      vim.keymap.set('n', '<Right>', function()
+        dap.step_into()
+      end, { silent = true, desc = 'DAP step into' })
+      vim.keymap.set('n', '<Down>', function()
+        dap.step_over()
+      end, { silent = true, desc = 'DAP step over' })
+      vim.keymap.set('n', '<Left>', function()
+        dap.step_out()
+      end, { silent = true, desc = 'DAP step out' })
+      vim.keymap.set('n', '<leader>b', function()
+        dap.toggle_breakpoint()
+      end, { silent = true, desc = 'DAP toggle [B]reakpoint' })
+
+      vim.keymap.set('n', '<leader>dc', function()
+        dap.continue()
+      end, { silent = true, desc = 'DAP start/continue' })
+      vim.keymap.set('n', '<leader>dx', function()
+        dap.terminate()
+      end, { silent = true, desc = 'DAP terminate' })
+
+      -- vim.keymap.set('n', '<leader>dv', function()
+      --   widgets.centered_float(widgets.scopes)
+      -- end, { silent = true, desc = 'DAP scopes' })
+      -- vim.keymap.set('n', '<leader>df', function()
+      --   widgets.centered_float(widgets.frames)
+      -- end, { silent = true, desc = 'DAP stack frames' })
+    end,
+  },
+  {
+    'rcarriga/nvim-dap-ui', -- Good default UI for nvim-dap debuggers
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'nvim-neotest/nvim-nio',
+    },
+    config = function()
+      require('dapui').setup {
+        controls = {
+          element = 'repl',
+          enabled = true,
+          icons = {
+            disconnect = '',
+            pause = '',
+            play = '',
+            run_last = '',
+            step_back = '',
+            step_into = '',
+            step_out = '',
+            step_over = '',
+            terminate = '',
+          },
+        },
+        element_mappings = {},
+        expand_lines = true,
+        floating = {
+          border = 'single',
+          mappings = {
+            close = { 'q', '<Esc>' },
+          },
+        },
+        force_buffers = true,
+        icons = {
+          collapsed = '',
+          current_frame = '',
+          expanded = '',
+        },
+        layouts = {
+          {
+            elements = {
+              {
+                id = 'scopes',
+                size = 0.25,
+              },
+              {
+                id = 'breakpoints',
+                size = 0.25,
+              },
+              {
+                id = 'stacks',
+                size = 0.25,
+              },
+              {
+                id = 'watches',
+                size = 0.25,
+              },
+            },
+            position = 'left',
+            size = 40,
+          },
+          {
+            elements = {
+              {
+                id = 'repl',
+                size = 0.5,
+              },
+              {
+                id = 'console',
+                size = 0.5,
+              },
+            },
+            position = 'bottom',
+            size = 10,
+          },
+        },
+        mappings = {
+          edit = 'e',
+          expand = { '<CR>', '<2-LeftMouse>' },
+          open = 'o',
+          remove = 'd',
+          repl = 'r',
+          toggle = 't',
+        },
+        render = {
+          indent = 1,
+          max_value_lines = 100,
+        },
+      }
+      vim.keymap.set('n', '<leader>du', function()
+        require('dapui').toggle()
+      end, { silent = true, desc = 'toggle [D]AP [U]i' })
+    end,
   },
   { -- Autoformat
     'stevearc/conform.nvim',
